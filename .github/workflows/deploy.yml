@@ -1,0 +1,55 @@
+name: 部署到 Vercel
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出代码
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # 设置 Node.js
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # 安装 bun
+      - name: 安装 Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      # 安装依赖
+      - name: 安装依赖
+        run: |
+          cd web
+          bun install
+
+      # 构建项目
+      - name: 构建项目
+        run: |
+          cd web
+          bun run build
+        env:
+          NODE_ENV: production
+
+      # 部署到 Vercel
+      - name: 部署到 Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+        working-directory: ./web
