@@ -84,4 +84,6 @@ bash scripts/setup-vercel.sh
 
 ---
 
+✅ **Secrets 配置完成！** 现在推送代码将自动触发 Vercel 部署。
+
 🎉 **恭喜！** 您的网站很快就可以在线访问了！
