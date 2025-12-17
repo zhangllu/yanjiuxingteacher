@@ -46,10 +46,9 @@ jobs:
 
       # 部署到 Vercel
       - name: 部署到 Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-        working-directory: ./web
+        run: |
+          cd web
+          vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --yes --confirm
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
