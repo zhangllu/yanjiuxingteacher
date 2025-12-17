@@ -43,6 +43,10 @@ jobs:
         env:
           NODE_ENV: production
 
+      # 安装 Vercel CLI
+      - name: 安装 Vercel CLI
+        run: npm install -g vercel
+
       # 部署到 Vercel
       - name: 部署到 Vercel
         run: |
