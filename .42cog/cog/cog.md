@@ -1,17 +1,17 @@
-# 活水智聊教学演示版（42chatdemo）- 认知模型文档
+# 研究型教师成长系统 - 认知模型文档
 
 <meta>
-  <document-id>42chat-cog</document-id>
+  <document-id>yanjiuxingteacher-cog</document-id>
   <version>1.0.0</version>
-  <project>活水智聊教学演示版（42chatdemo）</project>
+  <project>研究型教师成长系统</project>
   <type>认知模型</type>
-  <created>2025-12-10</created>
+  <created>2025-12-17</created>
   <depends>real.md</depends>
 </meta>
 
 ## 文档说明
 
-本文档基于"智能体 + 信息 + 上下文"框架，定义活水智聊教学演示版（42chatdemo）的认知模型。活水智聊是一个多模型AI对话中枢，核心在于统一管理用户与多个AI模型之间的对话交互。
+本文档基于"智能体 + 信息 + 上下文"框架，定义研究型教师成长系统的认知模型。本系统旨在帮助中小学教师将教学经验转化为可理解、可检验、可分享的教育研究能力，通过"理解 + 实践 + 反思"的成长路径，实现从"教书教师"向"研究型教师"的转变。
 
 ---
 
@@ -22,52 +22,62 @@
 ### 1.1 人类智能体
 
 <agent type="human" id="A1">
-<name>用户（User）</name>
+<name>教师（Teacher）</name>
 <identifier>UUID，注册时生成</identifier>
 <classification>
-  <by-role>普通用户 | 团队管理员</by-role>
-  <by-usage>轻度用户（偶尔使用）| 重度用户（日常工作依赖）</by-usage>
+  <by-stage>初级（研究意识培养）| 中级（基础研究能力）| 高级（研究实践与传播）</by-stage>
+  <by-school-level>幼儿园 | 小学 | 初中 | 高中</by-school-level>
+  <by-subject>语文 | 数学 | 英语 | 科学 | 艺术 | 体育 | 其他</by-subject>
 </classification>
 <capabilities>
-  - 发起对话、发送消息
-  - 切换AI模型
-  - 管理提示词模板
-  - 搜索和检索历史对话
-  - 导出对话记录
-  - 配置API密钥
+  - 观察课堂与学生行为
+  - 记录教学反思与观察日志
+  - 提出教育问题
+  - 设计小规模行动研究
+  - 分析教学数据
+  - 撰写研究报告
+  - 分享研究成果
 </capabilities>
 <goals>
-  - 在统一界面完成跨模型交流
-  - 降低模型切换成本
-  - 保留知识积累
-  - 获取实时信息
+  - 建立教育问题意识和研究意识
+  - 掌握基础教育研究方法
+  - 将研究融入日常教学
+  - 提升专业发展能力
+  - 改善课堂教学质量
+  - 更好地支持学生成长
+</goals>
+</agent>
+
+<agent type="human" id="A2">
+<name>学生（Student）</name>
+<identifier>去标识化代号（如：S001、学生A），不存储真实身份信息</identifier>
+<classification>
+  <by-grade>幼儿园 | 小学低年级 | 小学高年级 | 初中 | 高中</by-grade>
+  <by-observation-focus>学习表现 | 心理健康 | 社交行为 | 课堂参与</by-observation-focus>
+</classification>
+<capabilities>
+  - 参与课堂学习
+  - 展现学习行为和情绪状态
+  - 提供学习反馈
+</capabilities>
+<goals>
+  - 获得更好的学习体验
+  - 得到教师的有效支持
+  - 实现个人成长
 </goals>
 </agent>
 
 ### 1.2 人工智能体
 
-<agent type="ai" id="A2">
-<name>AI模型（AI Model）</name>
+<agent type="ai" id="A3">
+<name>AI研究助手（AI Research Assistant）</name>
 <identifier>provider + model_id（如：anthropic/claude-3-opus）</identifier>
 <classification>
-  <by-provider>Anthropic | OpenAI | Google | 其他</by-provider>
-  <by-capability>基础对话 | 高级推理 | 代码生成 | 多模态</by-capability>
+  <by-function>观察记录提炼 | 研究问题生成 | 研究设计辅助 | 反思写作支持</by-function>
 </classification>
 <interaction-pattern>
-  输入：用户消息 + 对话上下文 + 系统提示词
-  输出：AI回复（文本、代码块、图片等）
-</interaction-pattern>
-</agent>
-
-<agent type="ai" id="A3">
-<name>搜索引擎（Search Engine）</name>
-<identifier>provider（如：google、bing、tavily）</identifier>
-<classification>
-  <by-type>通用搜索 | 学术搜索 | 新闻搜索</by-type>
-</classification>
-<interaction-pattern>
-  输入：搜索查询
-  输出：搜索结果（标题、摘要、链接）
+  输入：教师的观察记录、教学问题、研究草稿
+  输出：结构化建议、研究框架、反思提示（明确标注为"AI辅助建议"）
 </interaction-pattern>
 </agent>
 
@@ -82,77 +92,154 @@
 ### 2.1 核心实体
 
 <entity id="E1">
-<name>对话（Conversation）</name>
-<unique-code>conversation_id：UUID，创建时生成</unique-code>
+<name>教师（Teacher）</name>
+<unique-code>teacher_id：UUID，注册时生成</unique-code>
 <classification>
-  <by-status>进行中 | 已归档</by-status>
-  <by-type>普通对话 | 模板对话</by-type>
+  <by-stage>初级 | 中级 | 高级</by-stage>
+  <by-school-level>幼儿园 | 小学 | 初中 | 高中</by-school-level>
+  <by-subject>学科分类</by-subject>
 </classification>
 <attributes>
-  - title：对话标题（自动生成或用户编辑）
-  - created_at：创建时间
-  - updated_at：最后更新时间
-  - user_id：所属用户
-  - model_id：当前使用的模型
+  - username：用户名
+  - email：邮箱（加密存储）
+  - school_type：学校类型
+  - teaching_years：教龄
+  - current_stage：当前成长阶段
+  - created_at：注册时间
 </attributes>
 <relations>
-  - 属于一个用户（N:1）
-  - 包含多条消息（1:N）
+  - 拥有多个观察记录（1:N）
+  - 拥有多个研究项目（1:N）
+  - 拥有多个反思日志（1:N）
 </relations>
 </entity>
 
 <entity id="E2">
-<name>消息（Message）</name>
-<unique-code>message_id：UUID，创建时生成</unique-code>
+<name>观察记录（Observation）</name>
+<unique-code>observation_id：UUID</unique-code>
 <classification>
-  <by-role>user | assistant | system</by-role>
-  <by-content-type>文本 | 代码 | 图片 | 搜索结果</by-content-type>
+  <by-focus>课堂教学 | 学生行为 | 学习表现 | 心理健康 | 课堂组织</by-focus>
+  <by-method>自然观察 | 结构化观察 | 视频记录 | 文字记录</by-method>
 </classification>
 <attributes>
-  - content：消息内容
-  - role：消息角色
-  - model_id：生成此消息的模型（assistant角色）
+  - title：观察标题
+  - content：观察内容（学生信息已去标识化）
+  - observation_date：观察日期
+  - focus_area：观察焦点
+  - teacher_id：所属教师
   - created_at：创建时间
-  - conversation_id：所属对话
 </attributes>
 <relations>
-  - 属于一个对话（N:1）
+  - 属于一个教师（N:1）
+  - 可关联多个研究问题（N:N）
 </relations>
 </entity>
 
 <entity id="E3">
-<name>提示词模板（Prompt Template）</name>
-<unique-code>template_id：UUID</unique-code>
+<name>研究问题（Research Question）</name>
+<unique-code>question_id：UUID</unique-code>
 <classification>
-  <by-scope>系统预设 | 用户自定义</by-scope>
-  <by-category>写作 | 编程 | 分析 | 翻译 | 其他</by-category>
+  <by-source>教师自主提出 | AI辅助生成</by-source>
+  <by-type>描述性问题 | 解释性问题 | 干预性问题</by-type>
 </classification>
 <attributes>
-  - name：模板名称
-  - content：模板内容
-  - variables：变量列表（可填充的占位符）
-  - user_id：创建者（用户自定义时）
+  - question_text：问题描述
+  - background：问题背景
+  - source：来源（教师/AI）
+  - status：状态（待研究、研究中、已完成）
+  - teacher_id：所属教师
 </attributes>
 <relations>
-  - 属于一个用户或系统（N:1）
-  - 可应用于多个对话（N:N）
+  - 属于一个教师（N:1）
+  - 可关联多个观察记录（N:N）
+  - 可关联一个研究项目（N:1）
 </relations>
 </entity>
 
 <entity id="E4">
-<name>模型配置（Model Config）</name>
-<unique-code>config_id：user_id + provider</unique-code>
+<name>研究项目（Research Project）</name>
+<unique-code>project_id：UUID</unique-code>
 <classification>
-  <by-provider>Anthropic | OpenAI | Google | 其他</by-provider>
+  <by-method>行动研究 | 案例研究 | 观察研究 | 混合方法</by-method>
+  <by-stage>设计阶段 | 实施阶段 | 分析阶段 | 完成阶段</by-stage>
 </classification>
 <attributes>
-  - api_key：API密钥（加密存储）
-  - base_url：自定义API地址（可选）
-  - default_model：默认模型
-  - enabled：是否启用
+  - title：项目标题
+  - research_question：研究问题
+  - method：研究方法
+  - design：研究设计
+  - data_collection：数据收集计划
+  - analysis_plan：分析计划
+  - findings：研究发现
+  - teacher_id：所属教师
+  - start_date：开始日期
+  - end_date：结束日期
 </attributes>
 <relations>
-  - 属于一个用户（N:1）
+  - 属于一个教师（N:1）
+  - 包含多个数据记录（1:N）
+  - 关联一个研究问题（1:1）
+</relations>
+</entity>
+
+<entity id="E5">
+<name>反思日志（Reflection Journal）</name>
+<unique-code>journal_id：UUID</unique-code>
+<classification>
+  <by-type>教学反思 | 研究反思 | 学习反思</by-type>
+  <by-ai-support>无AI辅助 | AI辅助提炼 | AI辅助结构化</by-ai-support>
+</classification>
+<attributes>
+  - title：日志标题
+  - content：反思内容
+  - reflection_date：反思日期
+  - ai_assisted：是否使用AI辅助
+  - teacher_id：所属教师
+</attributes>
+<relations>
+  - 属于一个教师（N:1）
+  - 可关联研究项目（N:1）
+</relations>
+</entity>
+
+<entity id="E6">
+<name>课程模块（Course Module）</name>
+<unique-code>module_id：UUID</unique-code>
+<classification>
+  <by-stage>初级 | 中级 | 高级</by-stage>
+  <by-topic>研究意识 | 观察方法 | 研究设计 | 数据分析 | 反思写作</by-topic>
+</classification>
+<attributes>
+  - title：模块标题
+  - description：模块描述
+  - content：课程内容
+  - stage：适用阶段
+  - order：顺序
+</attributes>
+<relations>
+  - 包含多个学习任务（1:N）
+  - 被多个教师学习（N:N）
+</relations>
+</entity>
+
+<entity id="E7">
+<name>研究成果（Research Output）</name>
+<unique-code>output_id：UUID</unique-code>
+<classification>
+  <by-type>研究报告 | 案例分析 | 反思文章 | 教学改进方案</by-type>
+  <by-visibility>私密 | 社区分享（匿名化）</by-visibility>
+</classification>
+<attributes>
+  - title：成果标题
+  - content：成果内容
+  - anonymized：是否已匿名化
+  - shared：是否分享
+  - teacher_id：所属教师
+  - project_id：关联项目
+</attributes>
+<relations>
+  - 属于一个教师（N:1）
+  - 关联一个研究项目（N:1）
 </relations>
 </entity>
 
@@ -160,24 +247,32 @@
 
 <information-flow>
 
-<flow id="F1" name="发送消息">
-  用户 → 输入消息 → 系统 → 调用AI模型API → AI模型 → 返回回复 → 系统 → 显示给用户
+<flow id="F1" name="教学观察记录">
+  教师 → 课堂观察 → 系统 → 记录观察内容（学生信息去标识化）→ 存储观察记录
 </flow>
 
-<flow id="F2" name="切换模型">
-  用户 → 选择新模型 → 系统 → 更新对话的model_id → 后续消息使用新模型
+<flow id="F2" name="AI辅助问题提炼">
+  教师 → 提交观察记录 → 系统 → 调用AI → AI研究助手 → 生成研究问题建议（标注为AI辅助）→ 教师审阅和修改 → 确认研究问题
 </flow>
 
-<flow id="F3" name="联网搜索">
-  用户 → 触发搜索 → 系统 → 调用搜索API → 搜索引擎 → 返回结果 → 系统 → 注入对话上下文
+<flow id="F3" name="研究设计">
+  教师 → 选择研究问题 → 系统 → 提供研究方法模板 → AI辅助生成研究框架 → 教师自主设计研究方案 → 创建研究项目
 </flow>
 
-<flow id="F4" name="对话检索">
-  用户 → 输入搜索词 → 系统 → 全文检索 → 返回匹配的对话列表
+<flow id="F4" name="数据收集与分析">
+  教师 → 实施研究 → 收集数据 → 系统 → 存储数据 → AI辅助分析建议 → 教师自主分析 → 记录研究发现
 </flow>
 
-<flow id="F5" name="导出对话">
-  用户 → 选择导出格式 → 系统 → 生成导出文件 → 用户下载
+<flow id="F5" name="反思写作">
+  教师 → 撰写反思日志 → 系统 → AI辅助结构化建议 → 教师完善反思 → 存储反思日志
+</flow>
+
+<flow id="F6" name="成果分享">
+  教师 → 完成研究报告 → 系统 → 自动匿名化处理 → 教师确认 → 发布到社区 → 其他教师浏览学习
+</flow>
+
+<flow id="F7" name="学习路径">
+  教师 → 选择课程模块 → 系统 → 提供课程内容 → 完成学习任务 → 实践应用 → 反思总结 → 进入下一阶段
 </flow>
 
 </information-flow>
@@ -192,26 +287,43 @@
 
 ### 3.1 应用上下文
 
-- **类型**：Web应用（响应式设计，支持桌面和移动端）
-- **部署**：Vercel / EdgeOne Pages
-- **数据存储**：云端数据库 + 本地缓存（IndexedDB）
+- **类型**：Web应用 + 移动端（响应式设计）
+- **使用场景**：
+  - 课后记录教学观察
+  - 周末设计研究方案
+  - 假期撰写研究报告
+  - 教师社区交流分享
+- **数据存储**：本地优先 + 云端同步（可选）
 
 ### 3.2 技术上下文
 
-- **前端架构**：Next.js 15 App Router + React Server Components
-- **UI框架**：Tailwind CSS + shadcn/ui
-- **认证方案**：Better Auth（强制登录）
-- **AI集成**：Vercel AI SDK（统一多模型调用）
-- **数据同步**：云端优先，本地兜底
+- **开发环境**：Apple Silicon Mac + Bun + uv + cnb.cool
+- **前端架构**（待定）：Next.js / React + Tailwind CSS + shadcn/ui
+- **后端架构**（待定）：Bun / Node.js + PostgreSQL / SQLite + Drizzle ORM / Prisma
+- **AI集成**：Vercel AI SDK + Claude / GPT-4 / 国产大模型
+- **安全机制**：
+  - 教师数据隔离（仅本人可访问）
+  - 学生信息去标识化
+  - AI生成内容明确标注
+  - 研究伦理指引
 
 ### 3.3 用户体验上下文
 
-- **情感目标**：流畅、可控、有安全感
-- **交互风格**：简洁、高效、低学习成本
+- **情感目标**：
+  - 安全感：数据隐私有保障
+  - 成就感：看到自己的研究能力成长
+  - 支持感：AI是伙伴而非替代者
+  - 归属感：在教师社区中交流学习
+- **交互风格**：
+  - 简洁：避免学术术语堆砌
+  - 实用：紧贴教学实践场景
+  - 渐进：分阶段引导，不急于求成
+  - 尊重：强调教师的主体性和专业判断
 - **核心体验**：
-  - 对话连贯，不中断
-  - 切换顺滑，无感知
-  - 数据可靠，不丢失
+  - 从日常教学中发现研究问题
+  - 在AI辅助下设计可行的小规模研究
+  - 通过反思实践提升专业能力
+  - 在社区中分享和学习
 
 </context>
 
@@ -223,12 +335,16 @@
 
 | 实体/交互 | 重要性 | 说明 |
 |-----------|--------|------|
-| 对话（Conversation） | ★★★★★ | 核心资产，必须可靠存储和检索 |
-| 消息（Message） | ★★★★★ | 对话的组成部分，不可丢失 |
-| 模型切换 | ★★★★☆ | 核心价值主张之一 |
-| 提示词模板 | ★★★☆☆ | 提效工具，非核心功能 |
-| 联网搜索 | ★★★☆☆ | 增强功能，按需使用 |
-| 模型配置 | ★★★★☆ | 关键配置，需安全存储 |
+| 教师 | ★★★★★ | 核心用户，所有功能围绕教师成长展开 |
+| 观察记录 | ★★★★★ | 研究的起点，必须易于记录和管理 |
+| 研究问题 | ★★★★☆ | 连接观察与研究的关键环节 |
+| 研究项目 | ★★★★☆ | 教师研究能力的具体体现 |
+| 反思日志 | ★★★★☆ | 促进教师自我反思和成长 |
+| AI辅助 | ★★★☆☆ | 辅助工具，不可喧宾夺主 |
+| 课程模块 | ★★★★☆ | 系统化学习的基础 |
+| 研究成果 | ★★★☆☆ | 成长的可见化成果 |
+| 隐私保护 | ★★★★★ | 必选约束，不可妥协 |
+| 研究伦理 | ★★★★★ | 必选约束，不可妥协 |
 
 </weights>
 
@@ -238,6 +354,9 @@
 
 - [ ] 所有实体都定义了唯一编码
 - [ ] 所有实体都有人类定义的分类
-- [ ] 信息流覆盖了核心用户场景
+- [ ] 信息流覆盖了核心用户场景（观察-问题-研究-反思-分享）
 - [ ] 上下文信息与meta.md和real.md保持一致
-- [ ] 权重矩阵反映了业务优先级
+- [ ] 权重矩阵反映了"教师主体性"和"隐私保护"的优先级
+- [ ] 学生信息去标识化机制已体现在观察记录实体中
+- [ ] AI辅助的边界在信息流中明确标注
+
